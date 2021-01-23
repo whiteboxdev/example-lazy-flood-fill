@@ -1,0 +1,19 @@
+local util = require "example.util"
+
+go.property("width", 160)
+go.property("height", 90)
+
+local grid
+
+local function draw(self)
+	for i = 1, self.height do
+		for j = 1, self.width do
+			tilemap.set_tile("#tilemap", "layer_1", j, i, grid[i][j])
+		end
+	end
+end
+
+function init(self)
+	grid = util.get_table(self.height, self.width, 5)
+	draw(self)
+end
