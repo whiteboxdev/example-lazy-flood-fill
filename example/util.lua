@@ -76,4 +76,8 @@ function util.clamp(min, max, value)
 	return value
 end
 
+function util.is_within_bounds(width, height, x, y)
+	return 0 < x and x <= width and 0 < y and y <= height
+end
+
 return util

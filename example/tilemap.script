@@ -5,6 +5,39 @@ go.property("height", 90)
 
 local grid
 
+go.property("iterations", 10)
+go.property("decay", 0.999)
+
+local function lazy_flood_fill(self)
+	for i = 1, self.iterations do
+		local tile_id = math.random(1, 8) * 8
+		local chance = 100
+		local queue = {}
+		table.insert(queue, { math.random(1, self.width), math.random(1, self.height) })
+		while #queue > 0 do
+			local x = queue[1][1]
+			local y = queue[1][2]
+			grid[y][x] = tile_id
+			table.remove(queue, 1)
+			if math.random(1, 100) <= chance then
+				if util.is_within_bounds(self.width, self.height, x, y - 1) and grid[y - 1][x] ~= tile_id then
+					table.insert(queue, { x, y - 1 })
+				end
+				if util.is_within_bounds(self.width, self.height, x - 1, y) and grid[y][x - 1] ~= tile_id then
+					table.insert(queue, { x - 1, y })
+				end
+				if util.is_within_bounds(self.width, self.height, x + 1, y) and grid[y][x + 1] ~= tile_id then
+					table.insert(queue, { x + 1, y })
+				end
+				if util.is_within_bounds(self.width, self.height, x, y + 1) and grid[y + 1][x] ~= tile_id then
+					table.insert(queue, { x, y + 1 })
+				end
+			end
+			chance = chance * self.decay
+		end
+	end
+end
+
 local function draw(self)
 	for i = 1, self.height do
 		for j = 1, self.width do
@@ -14,6 +47,9 @@ local function draw(self)
 end
 
 function init(self)
-	grid = util.get_table(self.height, self.width, 5)
+	msg.post("#", util.acquire_input_focus)
+	math.randomseed(os.clock() * 100000000000)
+	grid = util.get_table(self.height, self.width, 1)
+	lazy_flood_fill(self)
 	draw(self)
 end

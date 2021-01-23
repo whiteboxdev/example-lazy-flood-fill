@@ -12,7 +12,7 @@ height = 720
 input_method = HiddenInputField
 
 [project]
-title = example-lazy-flood-fill
+title = Lazy Flood Fill
 
 [tilemap]
 max_tile_count = 14400
