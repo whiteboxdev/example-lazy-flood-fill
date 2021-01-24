@@ -1,0 +1,9 @@
+local util = require "example.util"
+
+function on_message(self, message_id, message, sender)
+	if message_id == util.update_iterations then
+		gui.set_text(gui.get_node(util.iterations), "Iterations = " .. message.value)
+	elseif message_id == util.update_decay then
+		gui.set_text(gui.get_node(util.decay), "Decay = " .. message.value)
+	end
+end

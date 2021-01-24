@@ -46,6 +46,18 @@ util.trigger_response = hash("trigger_response")
 util.unload = hash("unload")
 util.window_resized = hash("window_resized")
 
+util.update_iterations = hash("update_iterations")
+util.update_decay = hash("update_decay")
+
+util.iterations = hash("iterations")
+util.decay = hash("decay")
+
+util.one = hash("one")
+util.two = hash("two")
+util.three = hash("three")
+util.four = hash("four")
+util.five = hash("five")
+
 function util.get_table(rows, columns, value)
 	local result = {}
 	for i = 1, rows do
@@ -78,6 +90,52 @@ end
 
 function util.is_within_bounds(width, height, x, y)
 	return 0 < x and x <= width and 0 < y and y <= height
+end
+
+util.deque = {}
+
+function util.deque.new()
+	return { front = 0, back = -1 }
+end
+
+function util.deque.is_empty(deque)
+	return deque.front > deque.back
+end
+
+function util.deque.front(deque)
+	return deque[deque.front]
+end
+
+function util.deque.back(deque)
+	return deque[deque.back]
+end
+
+function util.deque.push_front(deque, value)
+	deque.front = deque.front - 1
+	deque[deque.front] = value
+end
+
+function util.deque.pop_front(deque)
+	if deque.front <= deque.back then
+		local result = deque[deque.front]
+		deque[deque.front] = nil
+		deque.front = deque.front + 1
+		return result
+	end
+end
+
+function util.deque.push_back(deque, value)
+	deque.back = deque.back + 1
+	deque[deque.back] = value
+end
+
+function util.deque.pop_back(deque)
+	if deque.front <= deque.back then
+		local result = deque[deque.back]
+		deque[deque.back] = nil
+		deque.back = deque.back - 1
+		return result
+	end
 end
 
 return util

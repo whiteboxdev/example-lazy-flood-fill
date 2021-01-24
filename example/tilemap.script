@@ -1,36 +1,86 @@
+----------------------------------------------------------------------
+-- LICENSE
+----------------------------------------------------------------------
+
+-- MIT License
+
+-- Copyright (c) 2021 Klayton Kowalski
+
+-- Permission is hereby granted, free of charge, to any person obtaining a copy
+-- of this software and associated documentation files (the "Software"), to deal
+-- in the Software without restriction, including without limitation the rights
+-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-- copies of the Software, and to permit persons to whom the Software is
+-- furnished to do so, subject to the following conditions:
+
+-- The above copyright notice and this permission notice shall be included in all
+-- copies or substantial portions of the Software.
+
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+-- SOFTWARE.
+
+-- https://github.com/klaytonkowalski/example-lazy-flood-fill
+
+----------------------------------------------------------------------
+-- DEPENDENCIES
+----------------------------------------------------------------------
+
 local util = require "example.util"
+
+----------------------------------------------------------------------
+-- CONSTANTS
+----------------------------------------------------------------------
+
+local visited = 0
+
+----------------------------------------------------------------------
+-- PROPERTIES
+----------------------------------------------------------------------
 
 go.property("width", 160)
 go.property("height", 90)
 
 local grid
 
-go.property("iterations", 10)
-go.property("decay", 0.999)
+go.property("iterations", 30)
+go.property("decay", 0.9990)
+
+----------------------------------------------------------------------
+-- FUNCTIONS
+----------------------------------------------------------------------
 
 local function lazy_flood_fill(self)
 	for i = 1, self.iterations do
 		local tile_id = math.random(1, 8) * 8
 		local chance = 100
-		local queue = {}
-		table.insert(queue, { math.random(1, self.width), math.random(1, self.height) })
-		while #queue > 0 do
-			local x = queue[1][1]
-			local y = queue[1][2]
+		local deque = util.deque.new()
+		util.deque.push_back(deque, { math.random(1, self.width), math.random(1, self.height) })
+		while not util.deque.is_empty(deque) do
+			local x = util.deque.front(deque)[1]
+			local y = util.deque.front(deque)[2]
 			grid[y][x] = tile_id
-			table.remove(queue, 1)
+			util.deque.pop_front(deque)
 			if math.random(1, 100) <= chance then
-				if util.is_within_bounds(self.width, self.height, x, y - 1) and grid[y - 1][x] ~= tile_id then
-					table.insert(queue, { x, y - 1 })
+				if util.is_within_bounds(self.width, self.height, x, y - 1) and grid[y - 1][x] ~= tile_id and grid[y - 1][x] ~= visited then
+					util.deque.push_back(deque, { x, y - 1 })
+					grid[y - 1][x] = visited
 				end
-				if util.is_within_bounds(self.width, self.height, x - 1, y) and grid[y][x - 1] ~= tile_id then
-					table.insert(queue, { x - 1, y })
+				if util.is_within_bounds(self.width, self.height, x - 1, y) and grid[y][x - 1] ~= tile_id and grid[y][x - 1] ~= visited then
+					util.deque.push_back(deque, { x - 1, y })
+					grid[y][x - 1] = visited
 				end
-				if util.is_within_bounds(self.width, self.height, x + 1, y) and grid[y][x + 1] ~= tile_id then
-					table.insert(queue, { x + 1, y })
+				if util.is_within_bounds(self.width, self.height, x + 1, y) and grid[y][x + 1] ~= tile_id and grid[y][x + 1] ~= visited then
+					util.deque.push_back(deque, { x + 1, y })
+					grid[y][x + 1] = visited
 				end
-				if util.is_within_bounds(self.width, self.height, x, y + 1) and grid[y + 1][x] ~= tile_id then
-					table.insert(queue, { x, y + 1 })
+				if util.is_within_bounds(self.width, self.height, x, y + 1) and grid[y + 1][x] ~= tile_id and grid[y + 1][x] ~= visited then
+					util.deque.push_back(deque, { x, y + 1 })
+					grid[y + 1][x] = visited
 				end
 			end
 			chance = chance * self.decay
@@ -52,4 +102,54 @@ function init(self)
 	grid = util.get_table(self.height, self.width, 1)
 	lazy_flood_fill(self)
 	draw(self)
+end
+
+function on_input(self, action_id, action)
+	if action.pressed then
+		if action_id == util.one then
+			grid = util.get_table(self.height, self.width, 1)
+			lazy_flood_fill(self)
+			draw(self)
+		elseif action_id == util.two then
+			self.iterations = self.iterations - 2
+			if self.iterations < 2 then
+				self.iterations = 2
+			else
+				msg.post("/gui#gui", util.update_iterations, { value = self.iterations })
+				grid = util.get_table(self.height, self.width, 1)
+				lazy_flood_fill(self)
+				draw(self)
+			end
+		elseif action_id == util.three then
+			self.iterations = self.iterations + 2
+			if self.iterations > 40 then
+				self.iterations = 40
+			else
+				msg.post("/gui#gui", util.update_iterations, { value = self.iterations })
+				grid = util.get_table(self.height, self.width, 1)
+				lazy_flood_fill(self)
+				draw(self)
+			end
+		elseif action_id == util.four then
+			self.decay = self.decay - 0.0005
+			if self.decay < 0.9750 then
+				self.decay = 0.9750
+			else
+				msg.post("/gui#gui", util.update_decay, { value = self.decay })
+				grid = util.get_table(self.height, self.width, 1)
+				lazy_flood_fill(self)
+				draw(self)
+			end
+		elseif action_id == util.five then
+			self.decay = self.decay + 0.0005
+			if self.decay > 0.9999 then
+				self.decay = 0.9999
+			else
+				msg.post("/gui#gui", util.update_decay, { value = self.decay })
+				grid = util.get_table(self.height, self.width, 1)
+				lazy_flood_fill(self)
+				draw(self)
+			end
+		end
+	end
 end
