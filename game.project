@@ -13,6 +13,8 @@ input_method = HiddenInputField
 
 [project]
 title = Lazy Flood Fill
+publisher = Klayton Kowalski
+developer = Klayton Kowalski
 
 [tilemap]
 max_tile_count = 14400
@@ -20,4 +22,8 @@ max_tile_count = 14400
 [graphics]
 default_texture_min_filter = nearest
 default_texture_mag_filter = nearest
+
+[html5]
+show_fullscreen_button = 0
+scale_mode = no_scale
 

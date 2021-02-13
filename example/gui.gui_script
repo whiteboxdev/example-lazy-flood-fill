@@ -4,6 +4,6 @@ function on_message(self, message_id, message, sender)
 	if message_id == util.update_iterations then
 		gui.set_text(gui.get_node(util.iterations), "Iterations = " .. message.value)
 	elseif message_id == util.update_decay then
-		gui.set_text(gui.get_node(util.decay), "Decay = " .. message.value)
+		gui.set_text(gui.get_node(util.decay), "Decay = " .. string.format("%.4f", message.value))
 	end
 end
