@@ -1,7 +1,7 @@
 # Lazy Flood Fill
 Demonstration of the lazy flood fill algorithm and procedural map generation.
 
-Watch the reference video: https://www.youtube.com/watch?v=  
+Watch the reference video: https://www.youtube.com/watch?v=YS0MTrjxGbM  
 Play with the interactive HTML5 demo: https://klaytonkowalski.github.io/bundles/example-lazy-flood-fill/index.html
 
 Please click the "Star" button on GitHub if you find this asset to be useful!
