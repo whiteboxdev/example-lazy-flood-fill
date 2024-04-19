@@ -14,8 +14,10 @@ Please click the ☆ button on GitHub if this repository is useful or interestin
 
 ## Controls
 
-<1> Generate a new map.  
-<2> Decrease the iterations value.  
-<3> Increase the iterations value.  
-<4> Decrease the decay value.  
-<5> Increase the decay value.
+| Control | Description |
+| ------- | ----------- |
+| 1 | Generate a new map. |
+| 2 | Decrease the iteration count. |
+| 3 | Increase the iteration count. |
+| 4 | Decrease the decay value. |
+| 5 | Increase the decay value. |
