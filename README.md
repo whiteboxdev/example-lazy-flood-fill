@@ -6,11 +6,11 @@ Watch the reference video:
 https://www.youtube.com/watch?v=YS0MTrjxGbM
 
 Play with the interactive HTML5 demo:  
-https://klaytonkowalski.github.io/bundles/example-lazy-flood-fill/index.html
+https://whiteboxdev.github.io/bundles/example-lazy-flood-fill/index.html
 
 Please click the ☆ button on GitHub if this repository is useful or interesting. Thank you!
 
-![alt text](https://github.com/klaytonkowalski/example-lazy-flood-fill/blob/main/assets/thumbnail.png?raw=true)
+![alt text](https://github.com/whiteboxdev/example-lazy-flood-fill/blob/main/assets/thumbnail.png?raw=true)
 
 ## Controls
 
